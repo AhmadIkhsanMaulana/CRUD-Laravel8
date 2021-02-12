@@ -18,10 +18,27 @@ class ClassController extends Controller
         return $this->respondWithResource($classes);
     }
 
+    public function show($classesId)
+    {
+        $class = Classes::findOrFail($classesId);
+
+        return $this->respondWithResource($class);
+    }
+
     public function create()
     {
         $class  = new Classes;
         $class->id = Uuid::uuid4()->toString();
+        $class = $this->fill($class, $this->request->only(['name', 'teacher_id']));
+
+        $class->save();
+
+        return $this->respondWithResource($class);
+    }
+
+    public function update($classesId)
+    {
+        $class = Classes::findOrFail($classesId);
         $class = $this->fill($class, $this->request->only(['name', 'teacher_id']));
 
         $class->save();
@@ -41,5 +58,13 @@ class ClassController extends Controller
         ])->validate();
 
         return $class;
+    }
+
+    public function delete($classesId)
+    {
+        $class = Classes::findOrFail($classesId);
+        $class->delete();
+
+        return response('ok');
     }
 }

@@ -32,6 +32,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Services', 'middleware' => 'a
 
     Route::group(['prefix' => 'classes'], function () {
         Route::get('/', ['as' => 'class-index', 'uses' => 'ClassController@index']);
-        Route::post('/', ['as' => 'class-index', 'uses' => 'ClassController@create']);
+        Route::post('/', ['as' => 'class-create', 'uses' => 'ClassController@create']);
+        Route::get('/{classesId}', ['as' => 'class-show', 'uses' => 'ClassController@show']);
+        Route::patch('/{classesId}', ['as' => 'class-update', 'uses' => 'ClassController@update']);
+        Route::delete('/{classesId}', ['as' => 'class-delete', 'uses' => 'ClassController@delete']);
     });
 });

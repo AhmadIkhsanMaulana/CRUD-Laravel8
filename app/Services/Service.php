@@ -26,7 +26,7 @@ class Service
 
     public function get($url, $queryParams = [])
     {
-        try {
+        // try {
 
             $apiRequest = $this->client->request('GET', "api$url", [
                 'headers' =>
@@ -37,9 +37,9 @@ class Service
 
             return $apiRequest;
 
-        } catch (Exception $error) {
-            abort(408, $error->getMessage());
-        }
+        // } catch (Exception $error) {
+        //     abort(408, $error->getMessage());
+        // }
     }
 
     public function post($url, $data = [])
@@ -60,46 +60,54 @@ class Service
         // }
     }
 
-    public function postWithFile($url, $files = [], $data = [])
-    {
-        try {
-            $result = Http::withToken($this->token)
-                         ->asMultipart();
-            foreach ($files as $v) {
-                $result = $result->attach($v['file_extension'], fopen($v['file'], 'r'), $v['file_name']);
-            }
+    // public function postWithFile($url, $files = [], $data = [])
+    // {
+    //     try {
+    //         $result = Http::withToken($this->token)
+    //                      ->asMultipart();
+    //         foreach ($files as $v) {
+    //             $result = $result->attach($v['file_extension'], fopen($v['file'], 'r'), $v['file_name']);
+    //         }
 
-            $result = $result->timeout($this->timeout)
-            ->post(env('API_HOST').$url, $data);
+    //         $result = $result->timeout($this->timeout)
+    //         ->post(env('API_HOST').$url, $data);
 
-            return $result;
-        } catch (Exception $error) {
-            abort(408, "Connection Timeout: $url");
-        }
-    }
+    //         return $result;
+    //     } catch (Exception $error) {
+    //         abort(408, "Connection Timeout: $url");
+    //     }
+    // }
 
-    public function postUploadImage($url, $files = [], $data = [])
-    {
-        try {
-            $result = Http::withToken($this->token)
-                         ->asMultipart();
-            foreach ($files as $v) {
-                $result = $result->attach($v['payload_name'], fopen($v['file'], 'r'), $v['file_name']);
-            }
+    // public function postUploadImage($url, $files = [], $data = [])
+    // {
+    //     try {
+    //         $result = Http::withToken($this->token)
+    //                      ->asMultipart();
+    //         foreach ($files as $v) {
+    //             $result = $result->attach($v['payload_name'], fopen($v['file'], 'r'), $v['file_name']);
+    //         }
 
-            $result = $result->timeout($this->timeout)
-            ->post(env('API_HOST').$url, $data);
+    //         $result = $result->timeout($this->timeout)
+    //         ->post(env('API_HOST').$url, $data);
 
-            return $result;
-        } catch (Exception $error) {
-            abort(408, "Connection Timeout: $url");
-        }
-    }
+    //         return $result;
+    //     } catch (Exception $error) {
+    //         abort(408, "Connection Timeout: $url");
+    //     }
+    // }
 
     public function put($url, $data = [])
     {
         try {
-            return Http::withToken($this->token)->timeout($this->timeout)->put(env('API_HOST').$url, $data);
+            $apiRequest = $this->client->request('PUT', "api$url", [
+                'form_params' => $data,
+                'headers' =>
+                [
+                  'Authorization' => 'Bearer '.$this->token
+                ]
+              ]);
+
+            return $apiRequest;
         } catch (Exception $error) {
             abort(408, "Connection Timeout: $url");
         }
@@ -107,20 +115,35 @@ class Service
 
     public function patch($url, $data = [])
     {
-        try {
-            return Http::withToken($this->token)->timeout($this->timeout)->patch(env('API_HOST').$url, $data);
-        } catch (Exception $error) {
-            abort(408, "Connection Timeout: $url");
-        }
+        // try {
+            $apiRequest = $this->client->request('PATCH', "api$url", [
+                'form_params' => $data,
+                'headers' =>
+                [
+                  'Authorization' => 'Bearer '.$this->token
+                ]
+              ]);
+
+            return $apiRequest;
+        // } catch (Exception $error) {
+        //     abort(408, "Connection Timeout: $url");
+        // }
     }
 
     public function delete($url, $data = [])
     {
-        try {
-            return Http::withToken($this->token)->timeout($this->timeout)->delete(env('API_HOST').$url, $data);
-        } catch (Exception $error) {
-            abort(408, "Connection Timeout: $url");
-        }
+        // try {
+            $apiRequest = $this->client->request('DELETE', "api$url", [
+                'headers' =>
+                [
+                  'Authorization' => 'Bearer '.$this->token
+                ]
+              ]);
+
+            return $apiRequest;
+        // } catch (Exception $error) {
+        //     abort(408, "Connection Timeout: $url");
+        // }
     }
 
     public function showResponse(Psr7Response $response)

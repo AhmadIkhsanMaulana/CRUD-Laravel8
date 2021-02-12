@@ -27,6 +27,16 @@ class ClassTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
+    public function testShow()
+    {
+        $user = User::factory()->make();
+        $class = Classes::factory()->create();
+
+        $response = $this->actingAs($user)->get("/api/classes/$class->id");
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
     public function testCreate()
     {
         $user = User::factory()->make();
@@ -43,23 +53,28 @@ class ClassTest extends TestCase
 
     public function testUpdate()
     {
-        $class = Classes::factory()->make();
+        $user = User::factory()->make();
+        $class = Classes::factory()->create();
 
         $payload = [
             'name' => $this->faker->name,
-            'teacher_id' => $this->faker->id,
+            'teacher_id' => $this->faker->uuid,
         ];
 
-        $response = $this->patch("/api/classes/$class->id");
+        $response = $this->actingAs($user)->patch("/api/classes/$class->id", $payload);
 
         $response->assertStatus(Response::HTTP_OK);
+        $this->assertEquals($payload['name'], $response['data']['name']);
     }
 
     public function testDelete()
     {
-        $response = $this->delete("/api/classes/$class->id");
+        $user = User::factory()->make();
+        $class = Classes::factory()->create();
 
-        $response->assertStatus(200);
+        $response = $this->actingAs($user)->delete("/api/classes/$class->id");
+
+        $response->assertStatus(Response::HTTP_OK);
     }
 
 }

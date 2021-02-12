@@ -32,8 +32,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Web'], function () {
     });
 
     Route::group(['prefix' => 'classes'], function () {
-        Route::get('/', function () {
-            return view('class.index');
-        });
+        Route::get('/', ['as' => 'classes-index', 'uses' => 'ClassesController@index']);
+        Route::get('/create', ['as' => 'classes-create', 'uses' => 'ClassesController@create']);
+        Route::post('/store', ['as' => 'classes-store', 'uses' => 'ClassesController@store']);
+        Route::get('/{classesId}', ['as' => 'classes-show', 'uses' => 'ClassesController@show']);
+        Route::get('/{classesId}/edit', ['as' => 'classes-edit', 'uses' => 'ClassesController@edit']);
+        Route::post('/{classesId}/store', ['as' => 'classes-store-update', 'uses' => 'ClassesController@storeUpdate']);
+        Route::get('/{classesId}', ['as' => 'classes-delete', 'uses' => 'ClassesController@delete']);
     });
 });
