@@ -27,9 +27,9 @@
         </thead>
         <tbody>
             @php
-                $no = 1;
+                $no = $classes['meta']['from'];
             @endphp
-            @foreach($classes as $class)
+            @foreach($classes['data'] as $class)
                 <tr>
                 <th scope="row">{{ $no++ }}</th>
                 <td>{{ $class['name'] }}</td>
@@ -43,6 +43,28 @@
             @endforeach
         </tbody>
         </table>
+
+         <!-- Pagination -->
+         @if($classes && ($classes['meta']['total'] > 20))
+            <nav class="navigation mt-5">
+                <div>
+                    <span class="pagination-detail">{{ $classes['meta']['to'] ?? 0 }} dari {{ $classes['meta']['total'] }} class</span>
+                </div>
+                <ul class="pagination">
+                    <li class="page-item {{ (request()->page ?? 1) - 1 <= 0 ? 'disabled' : '' }}">
+                        <a class="page-link" href="?page={{ (request()->page ?? 1) - 1 }}" tabindex="-1">&lt;</a>
+                    </li>
+                    @for($i=1; $i <= $classes['meta']['last_page']; $i++)
+                    <li class="page-item {{ (request()->page ?? 1) == $i ? 'active disabled' : '' }}">
+                        <a class="page-link" href="?page={{ $i }}">{{ $i }}</a>
+                    </li>
+                    @endfor
+                    <li class="page-item {{ ((request()->page ?? 1) + 1) > $classes['meta']['last_page'] ? 'disabled' : '' }}">
+                        <a class="page-link" href="?page={{ (request()->page ?? 1) + 1 }}">&gt;</a>
+                    </li>
+                </ul>
+            </nav>
+        @endif()
     </div>
 </div>
 @endsection

@@ -27,8 +27,9 @@ class Service
     public function get($url, $queryParams = [])
     {
         // try {
+            $queryParams = http_build_query($queryParams);
 
-            $apiRequest = $this->client->request('GET', "api$url", [
+            $apiRequest = $this->client->request('GET', "api$url?$queryParams", [
                 'headers' =>
                 [
                   'Authorization' => 'Bearer '.$this->token

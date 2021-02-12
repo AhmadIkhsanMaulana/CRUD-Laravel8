@@ -7,9 +7,9 @@ use App\Services\Service;
 class Classes extends Service
 {
 
-    public function index()
+    public function index($filter = [])
     {
-        $response = $this->get('/classes');
+        $response = $this->get('/classes', $filter);
 
         return $this->showResponse($response);
     }

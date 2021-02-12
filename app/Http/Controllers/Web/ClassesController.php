@@ -11,7 +11,12 @@ class ClassesController extends Controller
     public function index()
     {
         $classService = new Classes;
-        $classes = $classService->index()['data'] ?? [];
+
+        $filter = [
+            'page' => $this->request->page ?? 1,
+        ];
+
+        $classes = $classService->index($filter) ?? [];
 
         return view('class.index')->with(['classes' => $classes]);
     }
