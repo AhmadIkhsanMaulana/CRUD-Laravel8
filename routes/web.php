@@ -14,5 +14,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
+});
+
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
+Route::group(['namespace' => 'App\Http\Controllers\Web'], function () {
+
+    Route::post('/do-login', ['as' => 'do-login', 'uses' => 'HomeController@login']);
+
+    Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'HomeController@dashboard']);
+
+    Route::get('/menus', function () {
+        return view('menu');
+    });
+
+    Route::group(['prefix' => 'classes'], function () {
+        Route::get('/', function () {
+            return view('class.index');
+        });
+    });
 });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Services\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'auth'], function () {
+
+    Route::post('/', ['as' => 'login', 'uses' => 'Services\AuthController@login']);
+    Route::delete('/', ['as' => 'logout', 'uses' => 'Services\AuthController@logout']);
+});
+
+Route::group(['namespace' => 'App\Http\Controllers\Services', 'middleware' => 'auth'], function () {
+
+    Route::get('/me', ['as' => 'me', 'uses' => 'UserController@me']);
+
+
+    Route::group(['prefix' => 'classes'], function () {
+        Route::get('/', ['as' => 'class-index', 'uses' => 'ClassController@index']);
+        Route::post('/', ['as' => 'class-index', 'uses' => 'ClassController@create']);
+    });
 });
